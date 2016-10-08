@@ -1,0 +1,415 @@
+
+http://www.pythonclub.org/python-basic/codec
+https://msdn.microsoft.com/zh-cn/library/ee922775%28v=office.14%29.aspx
+
+Windows系统配置python脚本开机启动的3种方法分享
+http://www.jb51.net/article/61939.htm
+
+reload()
+
+windows自动在文本首加入：\xef\xbb\xbf
+    U8编码的BOM，就是文件头吧，可加可不加，但windows的记事本默认会加的
+
+有使用限制的匿名函数： lambda
+不使用 return 只有一个表达式，即返回结果 a = lambda x : x*x
+
+【python的运算符】
+*[可以表示字符串的重复等] //[除取整商]  **[幂]  %  &[按位与] |[按位或] ^[异或]  ~[非]  <<[左移--乘2]  >>[右移--除2]
+
+ord('A')  只能将一个character字符转换成int，而不能转字符串
+chr(65)   int转换成字符
+str()    把int等转换成str类型字符串
+len(*)
+sorted(*)
+    具体sorted(*)、*.sort()的使用
+    前者不改变原list对象，并可对大多数Iterator对象使用
+    后者只能对list对象使用，改变list的值
+    利用operator.itemgetter()对dict、[dict]进行排序 : http://ghostfromheaven.iteye.com/blog/1563576
+    operator.itemgetter()这是一个函数，获取对象的某个域(第1个域)的值
+    http://www.cnblogs.com/100thMountain/p/4719503.html
+
+strip() 方法用于移除字符串头尾指定的字符（默认为空格）
+    "".strip()去掉空格和'\n'
+    str = "0000000this is string example....wow!!!0000000"
+    print str.strip('0')
+    # 输出：this is string example....wow!!!
+"".replace('old', 'new')替换字符
+type()
+eval()  将字符串str当成有效的表达式来求值并返回计算结果
+    用处一：可以把list、tuple、dict和string类型相互转化
+    a = "[[1,2], [3,4], [5,6], [7,8], [9,0]]"
+    b = eval(a)
+    # 输出：[[1, 2], [3, 4], [5, 6], [7, 8], [9, 0]]
+
+    提示：是把传递进来的str当成有效的表达式！
+    可能会导致安全问题：
+    eval("__import__('os').system('dir')")
+    那么相当于直接执行内里str的指令，这很危险
+zip()   zip函数接受任意多个（包括0个和1个）序列作为参数，返回一个tuple列表
+	http://www.cnblogs.com/frydsh/archive/2012/07/10/2585370.html
+str、bool、int、float、None
+
+str---可以直接相加："Hello "+"world!"
+'\'.join(["1", "2", "3"])
+''.split()
+str默认为ASCII编码，ASCII码可以看做Utf-8编码
+
+
+
+编码的问题，
+内存中统一以Unicode编码，如此显示：u'\u4e2d'、u'中'
+传输都转换成utf-8编码，如此显示：'\xe4\xb8\xad\xe6\x96\x87'
+encode('utf-8')转化为utf-8编码
+decode('utf-8')utf-8编码转换成Unicode，还可以是其他编码转换成Unicode编码
+--------------------------------------------------
+关于python中编码和解码的问题简介：
+检测编码格式chardet
+python是会自动解码的，如果没有指明解码方式，就默认使用系统的编码方式进行解码。
+setdefaultencoding： http://blog.csdn.net/liuyukuan/article/details/5187633
+	a = "张家桦"
+	print a
+	b = u"高亚弘"
+	#print b #不能输出Unicode
+	print b.encode("gbk")
+	print b.encode("gb2312")
+	print b.encode("utf-8")
+	#print b.encode("ascii")
+
+	#a_gbk_unicode = a.decode("gbk")
+	a_utf_unicode = a.decode("utf-8") #只能通过正确的方式解码成Unicode
+	#a_ascii_unicode = a.decode("ascii")
+	print a_utf.encode('utf-8')
+--------------------------------------------------
+tuple---有序数组，不可变----()
+list---有序数组，可变
+    list.index(*)----获取*内容在list中的下标
+    list.append()----
+    list.extend()----
+    list.insert()----
+    list.pop(i)----delete the last one or the i
+    list.reverse()----倒置list，修改list本身
+    reversed(list)----倒置list，返回的是一个listreverseiterator对象
+                      此对象，遍历一遍之后就为空！
+    del(list[0:3])----删除列表中一个或者连续几个元素
+set---用来存放不重复的key----
+    不管开始存放的是list还是tuple，都显示为set([])
+    x & y # 交集
+    x | y # 并集
+    x - y # 差集
+    x ^ y # 对称差集（项在x或y中，但不会同时出现在二者中）
+    http://blog.csdn.net/business122/article/details/7541486
+python的random的使用
+    http://www.jb51.net/article/45653.htm
+
+dict---字典，map类
+d = {'Michael': 95, 'Bob': 75, 'Tracy': 85}
+d['Michael']
+
+迭代：
+
+1.先说一下Iterable，中文意思是迭代器。
+Python的帮助文档中对iterable的解释是：iteralbe指的是能够一次返回它的一个成员的对象。iterable主要包括3类：
+第一类是所有的序列类型，比如list(列表)、str(字符串)、tuple(元组)。
+第二类是一些非序列类型，比如dict(字典)、file(文件)。
+第三类是你定义的任何包含__iter__()或__getitem__()方法的类的对象。
+
+from collections import Iterable
+isinstance([1,2,3], Iterable) # 查看某对象是否可迭代
+
+字典的迭代遍历
+dict的items函数返回的是键值对的元组的列表，而iteritems使用的是键值对的generator。
+items当使用时会调用整个列表
+iteritems当使用时只会调用值。尽量使用iteritems
+http://www.cnblogs.com/waising/articles/2298254.html
+
+Python内置的enumerate函数可以把一个list变成索引-元素对
+
+列表生成式： [x * x for x in range(1, 11) if x % 2 == 0]
+
+生成器Generator
+	用来构成一个生成列表的对象g = (x * x for x in range(1, 11) if x % 2 == 0)
+	此对象调用next()时，才一个个的返回列表中数
+	对函数使用yield来返回数，也可以构成生成器。
+
+
+函数参数问题：
+函数的默认参数必须指向不变对象
+
+
+
+if age >= 18:
+    print 'adult'
+else:
+    print 'teenager'
+
+    u'ABC'.encode('utf-8')
+
+
+安装模块的语句
+easy_install requests
+pip install requests
+运行一个django项目的语法：
+python manage.py runserver 127.0.0.1:8080(可以自己指定端口号，默认是8000，但是开了酷狗后就会起冲突)
+
+pycharm
+
+elasticsearch
+
+return 'Hello, %s' % name
+
+【定制类】
+属性：
+__slots__ = ('name', 'age') # 用tuple定义允许绑定的属性名称
+
+如何封装类属性，又使得属性易访问。
+使用内置的 @property 装饰器把方法变成属性调用
+每个 @property对应一个 @属性.setter
+
+方法：
+def __str__(self)   使用print直接输出对象调用
+def __repr__ (self)  直接输出对象时调用
+
+//使用for in的功能，类似list或tuple那样
+def __iter__(self)
+def next(self)
+	raise StopIteration()
+
+//利用此方法可以获得list[n]、dict[key]、切片等功能
+def __getitem__(self, n)
+	if isinstance(n, slice):
+		start = n.start
+		stop = n.stop
+def __setitem__(self, )
+def __delitem__(self, )
+
+//如果没有属性，调用一下方法
+def __getattr__(self, attr)
+	raise AttributeError('没有此方法或者属性%s' % attr)
+
+//添加下面函数就可以使类变量-实例，类似函数一样能被使用
+def __call__(self)
+如此就能使用
+s = Student() //这个类如同函数一样使用
+s()  会去调用call方法
+可以使用 callable(obj)进行检查是否为函数
+
+====动态语言中类的创建过程====
+
+方法一：
+类的类型为 type
+运行时动态创建，需要三个参数：类名、父类 tuple 、属性 dict
+Hello = type('ABC', (object,), dict(name = 'zhang', age = 12))
+这创建的是一个Hello类，以接收参数为准
+ABC这个参数是用来告诉系统的，调用type检测变量类型时，返回的是ABC
+所以它们最好一致
+type()函数可以查看一个类型或变量的类型
+
+方法二：
+元类metaclass
+这里涉及到python中类的动态创建
+首先在类及其父类中检测 __metaclass__ 如果检测到
+那么就以此属性对应的OneMetaclass类的 def __new__(cls, name, bases, attrs): 方法来创建当前类
+
+python中 super 的使用，通过 super 调用父类方法
+super(当前那的类名, self).__init__(name, 'varchar(100)')
+
+
+【I/O:磁盘、网络】
+(同步IO、异步IO:由于CPU和内存的速度与外设速度不匹配)
+try:
+    f = open('/path/to/file')
+    //不写对文件的操作方式，默认为'r'方式
+    for line in f:
+        print line
+    //可以以这种方式来访问，文件的每一行
+    f = open('/path/to/file', 'r')
+    //'r'默认以读取ASCII编码的文本文件，如果是二进制文件使用'rb'
+    //非ASCII编码的文件只能以二进制形式打开，之后进行解码
+    //f.read().decode('gbk')
+    //codecs模块提供自动转码
+    print f.read()
+finally:
+    if f:
+        f.close()
+等价：
+with open('/path/to/file', 'r') as f:
+    print f.read()
+    f.write()
+
+import codecs
+with codecs.open('/path/file', 'rb') as f:
+    f.read()
+#自动转码
+
+f.read()
+f.read(size)
+f.readlines()
+
+可以通过import os这个模块来调用操作系统内置的东西
+但是此接口提供的方法跟操作系统本身有关
+os.name 当前电脑所使用的系统名字
+os.environ  环境变量
+os.path.abspath('')绝对路径
+os.mkdir('')创建一个目录
+os.rmdir('')删掉一个目录
+os.remove('')删掉一个文件
+os.path.join('', '')合并路径
+os.rename('test.txt', 'test.py')重命名
+
+os.path.split('path\\file.txt')返回最后级别的目录或文件名file.txt
+	('path', 'file.txt')
+os.path.splitext('path\\file.txt')返回文件的扩展名.txt
+	('path\\file', '.txt')
+	os.path.splitext(x)[1]=='.py'
+os.listdir('path')返回path路径下的所有文件和文件夹。'.'表示当前目录
+	输出此此路径的问题！！？？find answer
+os.path.dirname(__file__)当前文件所在的文件夹
+os.path.isfile(x)判断x是否为文件
+os.path.isdir(x)判断x是否为文件夹
+os.curdir当前文件夹一般返回.
+os.path.abspath(os.curdir)当前的绝对路径
+
+
+操作系统并不提供复制文件的接口
+shutil模块提供了copyfile()用作对文件的复制
+如何进行过滤文件？
+
+【序列化与反序列化】
+把变量、对象从内存中变成可存储或传输的过程称之为序列化，pickling
+把变量内容从序列化的对象重新读到内存里称之为反序列化，unpickling
+
+1、序列化成str
+try:
+	import cPickle as pickle
+except ImportError:
+	import pickle
+
+file_obj = pickle.dumps(d) 序列化
+file_obj = pickle.loads(d) 反序列化
+
+pickle.dump(d, f) 序列化并写入文件
+object = pickle.load(f) 反序列化出对象
+
+2、序列化成JSON
+Python内置的json模块
+import json
+
+[dict对象直接序列化]
+json_str = json.dumps(dict) 序列化
+unicode_str = json.loads(json_str)
+--------反序列化得到的所有字符串对象默认都是unicode
+--------不管最初读取的是Unicode还是ASCII或者UTF-8编码
+
+[自定义class序列化]
+自定义类的序列化，反序列化函数
+json.dumps(s, default = student2dict)
+json.dumps(s, default = lambda obj: obj.__dict__)
+json.loads(json_str, object_hook = dict2student)
+
+处理二进制、字节数据
+
+【XML解析】
+XML的两种解析方式：DOM和SAX，一般使用SAX
+from xml.parsers.expat import ParserCreate
+但是不能继承ParserCreate
+只能采用函数赋值的方式
+handler = DefaultSaxHandler()  #自定义的类
+parser = ParserCreate()
+parser.returns_unicode = True  #使得返回的数据都是unicode类型的
+parser.StartElementHandler = handler.start_element
+parser.EndElementHandler = handler.end_element
+parser.CharacterDataHandler = handler.char_data
+parser.Parse(xml)
+
+【HTML解析】
+from HTMLParser import HTMLParser
+import urllib
+这个可继承，然后覆写对应的SAX方法即可
+urllib.urlopen('url').read()
+
+
+【进程、线程】
+
+
+【常用模块】
+urllib模块
+zipfile模块
+	用来做zip格式编码的压缩和解压缩的
+	可以直接操作zip文件中的所有文件，其中最常用两个类：ZipFile和ZipInfo
+	ZipFile是主要的类，用来创建和读取zip文件
+	ZipInfo是存储的zip文件的每个文件的信息的
+		filename     文件名
+		file_size      文件大小
+		header_offset     文件数据在压缩包中的偏移
+	z = zipfile.ZipFile(filename, 'r')
+	z.namelist() # 压缩包中所有文件名
+	z.infolist() # 压缩包中所有文件的信息，也就是ZipInfo的列表
+	z.read(z.namelist()[0]) # 可以把z看做是压缩包对象，对压缩包中一切文件的操作均要通过z
+	http://www.jb51.net/article/42628.htm
+
+datetime模块
+	python中的datetime模块
+	http://my.oschina.net/935572630/blog/397557
+
+
+【scrapy】
+
+他山之石：
+scrapy研究探索（二）——爬w3school.com.cn
+http://blog.csdn.net/u012150179/article/details/32911511
+Scrapy研究探索（三）——Scrapy核心架构与代码运行分析
+http://blog.csdn.net/u012150179/article/details/34441655
+Scrapy研究探索（五）——自动多网页爬取（抓取某人博客所有文章）
+http://blog.csdn.net/u012150179/article/details/34486677
+Scrapy研究探索（六）——自动爬取网页之II（CrawlSpider）
+http://blog.csdn.net/u012150179/article/details/34913315
+Scrapy研究探索（七）——如何防止被ban之策略大集合
+http://blog.csdn.net/u012150179/article/details/35774323
+
+-------------selectors
+文字构造选择器
+body = '<html><body><span>good</span></body></html>'
+Selector(text=body).xpath('//span/text()').extract()
+sel = Selector(text=body, type="html")
+
+response构造选择器:
+response = HtmlResponse(url='http://example.com', body=body)
+Selector(response=response).xpath('//span/text()').extract()
+或者
+response.selector.xpath('//span/text()').extract()
+由于在response中使用XPath、CSS查询十分普遍，因此，Scrapy提供了两个实用的快捷方式: response.xpath() 及 response.css():
+links = response.xpath('//a[contains(@href, "image")]')
+
+xpath中过滤标签的方式：
+starts-with()
+contains()
+re:test(@属性, "属性的内容")
+sel.xpath('//li[re:test(@class, "item-\d$")]// @href').extract()
+-------------request
+cookie的使用？
+
+dont_filter=True是什么意思？
+
+html_selector = HtmlXPathSelector(response)
+html_selector.select()
+
+settings.py
+
+DOWNLOAD_DELAY = 1   减慢爬取速度，减轻服务器端负载，防止爬虫被Ban
+
+
+jieba分词
+多线程分词、自定义分词库
+jieba.load_userdict("C:\\Users\\BFD_466\\Desktop\\123\\verb.txt")
+http://www.tuicool.com/articles/QV36ru
+
+去停顿词(可以使用set类型的特性)
+import jieba
+stop = [line.strip().decode('utf-8') for line in open('stopword.txt').readlines() ]
+segs = jieba.cut('北京附近的租房skf轴承skf轴承西安总代理')
+text = '|'.join(list(set(segs)-set(stop)))
+
+numpy函数：[2]tile函数用法
+http://jingyan.baidu.com/article/219f4bf7da4d8dde442d389e.html
+python中的sum函数.sum(axis=1)
+argsort()给出的是按递增数列排序后，原来位置的index下标

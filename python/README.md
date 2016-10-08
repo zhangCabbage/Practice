@@ -1,5 +1,5 @@
 # Quick start
-Use to record the daily coding practice
+Use to record the daily coding practice of Python.
 
 
 ## Create Time
