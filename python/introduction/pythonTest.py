@@ -50,6 +50,56 @@ def filePathTest():
     print os.path.dirname(__file__)
     print os.path.dirname(os.path.dirname(__file__))
 
+def iteratorTest():
+    """
+    关于__iter__ | next | __next__ 的关系？？
+    可迭代对象（Iterable）：实现了 __iter__ 方法
+
+    可迭代对象通过__iter__方法获得迭代器Iterator
+    然后迭代器通过其__next__方法进行迭代，返回数值结果
+    生成器也是迭代器，所以当在__iter__中通过yield返回时，不需要使用next
+
+    iterator对象需要 __iter__ 和 next 两个函数，python3中换成 __next__
+    以下实现方式参见：
+    http://stackoverflow.com/questions/19151/build-a-basic-python-iterator
+    """
+    print("iterator Test -->")
+    class Counter:
+        def __init__(self):
+            self.nums = (x for x in range(10))
+            self.all_nums = []
+
+        def __iter__(self):
+            print "__iter__12"
+            i = 0
+            while True:
+                if i < len(self):
+                    yield self.all_nums[i]
+                else:
+                    yield next(self)
+                i += 1
+
+        def next(self): # Python 3: def __next__(self)
+            print "next"
+            return self.__next__()
+
+        def __next__(self):
+            print "__next__"
+            try:
+                num = next(self.nums)
+                self.all_nums.append(num)
+                return num
+            except StopIteration:
+                raise StopIteration('Counter contains no more nums.')
+
+        def __len__(self):
+            return len(self.all_nums)
+
+    a = Counter()
+    print list(a)
+    print list(a)
+
+
 if __name__ == '__main__':
     print "Hello World!"
     generatorTest()
@@ -69,3 +119,4 @@ if __name__ == '__main__':
 
     loopTest(2, 4)
     filePathTest()
+    iteratorTest()
