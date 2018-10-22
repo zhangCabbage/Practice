@@ -1,8 +1,9 @@
-# Quick start
-Use to record the daily coding practice of Java
+12
+23
+34
+45  
+56
+67
 
-
-## Create Time
-2016.10.8
-
-> Talk is cheap. Show me the code.--Linus Torvalds
+78   
+89  
